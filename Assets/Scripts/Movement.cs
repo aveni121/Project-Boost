@@ -5,6 +5,7 @@ using UnityEngine;
 public class Movement : MonoBehaviour
 {
     Rigidbody rb;
+    AudioSource audioSource;
     [SerializeField]float mainThrust = 100f;
     [SerializeField]float rotationThrust = 100f;
 
@@ -12,6 +13,7 @@ public class Movement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        audioSource = GetComponent<AudioSource>();
         rb = GetComponent<Rigidbody>();
     }
 
@@ -24,10 +26,20 @@ public class Movement : MonoBehaviour
 
     void ProcessInput()
     {
+        float startVolume = audioSource.volume;
 
-        if(Input.GetKey(KeyCode.Space)){
+        if(Input.GetKey(KeyCode.Space))
+        {
             rb.AddRelativeForce(Vector3.up * mainThrust * Time.deltaTime);
-        }  
+            if(!audioSource.isPlaying)
+            {
+                audioSource.Play();
+            }
+        }
+        else
+        {
+            audioSource.Stop();
+        }
     }
 
 
